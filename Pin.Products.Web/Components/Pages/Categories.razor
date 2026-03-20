@@ -2,31 +2,44 @@
 @inject ICategoryApiService CategoryApiService
 <h3>Categories</h3>
 @* show category list component *@
-@if(CategoryModels is null)
+@if(categoryModels is null)
 { 
     <LoadingComponent></LoadingComponent>
 }
 else
 { 
-    <CategoryListComponent Categories="CategoryModels"></CategoryListComponent>
+    @if(newCategory is not null)
+    {
+        //show the new category form
+    }
+    else
+    { 
+        <CategoryListComponent Categories="categoryModels" OnAdd="NewCategory"></CategoryListComponent>
+    }
 }
 @code {
-    [Parameter]
-    public IEnumerable<CategoryModel> CategoryModels { get; set; }
+    private CategoryModel newCategory;
+    private IEnumerable<CategoryModel> categoryModels;
     protected override async Task OnInitializedAsync()
     {
-        GetCategories();
+        await GetCategories();
     }
     private async Task GetCategories()
     {
         var result = await CategoryApiService.GetAllAsync();
         if(result.IsSuccess)
         {
-            CategoryModels = result.Data;
+            categoryModels = result.Data;
         }
         else
         {
             //display error
         }
+    }
+    //reacts/handles a click on the 'New' button
+    //displays the form
+    private void NewCategory()
+    {
+        newCategory = new();
     }
 }
