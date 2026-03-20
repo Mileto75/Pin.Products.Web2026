@@ -1,7 +1,6 @@
 ﻿@page "/categories"
 @inject ICategoryApiService CategoryApiService
 <h3>Categories</h3>
-
 @* show category list component *@
 @if(CategoryModels is null)
 { 
@@ -16,7 +15,7 @@ else
     public IEnumerable<CategoryModel> CategoryModels { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        await GetCategories();
+        GetCategories();
     }
     private async Task GetCategories()
     {
