@@ -1,9 +1,16 @@
 ﻿
-<EditForm Model="NewCategory">
-
-</EditForm>
-
+<div class="col col-lg-4 mx-auto">
+    <EditForm Model="NewCategory" OnValidSubmit="@(()=> OnSave.InvokeAsync(NewCategory))">
+        <div class="form-group">
+            <label>Name:</label>
+            <InputText @bind-Value="NewCategory.Name" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-outline-info">Save</button>
+    </EditForm>
+</div>
 @code {
     [Parameter]
     public CreateOrUpdateCategoryModel NewCategory { get; set; }
+    [Parameter]
+    public EventCallback<CreateOrUpdateCategoryModel> OnSave { get; set; }
 }
