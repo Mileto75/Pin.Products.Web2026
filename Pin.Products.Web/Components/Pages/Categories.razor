@@ -2,9 +2,32 @@
 @inject ICategoryApiService CategoryApiService
 <h3>Categories</h3>
 
-@code {      
+@* show category list component *@
+@if(CategoryModels is null)
+{ 
+    <LoadingComponent></LoadingComponent>
+}
+else
+{ 
+    <CategoryListComponent Categories="CategoryModels"></CategoryListComponent>
+}
+@code {
+    [Parameter]
+    public IEnumerable<CategoryModel> CategoryModels { get; set; }
     protected override async Task OnInitializedAsync()
     {
+        await GetCategories();
+    }
+    private async Task GetCategories()
+    {
         var result = await CategoryApiService.GetAllAsync();
+        if(result.IsSuccess)
+        {
+            CategoryModels = result.Data;
+        }
+        else
+        {
+            //display error
+        }
     }
 }

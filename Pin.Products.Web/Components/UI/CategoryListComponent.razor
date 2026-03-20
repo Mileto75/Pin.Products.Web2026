@@ -1,0 +1,11 @@
+﻿
+<div class="row">
+    @foreach (var category in Categories)
+    {
+        <CategoryComponent Category="category"></CategoryComponent>
+    }
+</div>
+@code {
+    [Parameter]
+    public IEnumerable<CategoryModel> Categories { get; set; }
+}
