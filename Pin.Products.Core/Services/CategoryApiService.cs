@@ -17,13 +17,30 @@ namespace Pin.Products.Core.Services
         public CategoryApiService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri("https://api.escuelajs.co/api/v1/");
+            _httpClient.BaseAddress = new Uri("https://api.escuelajs.co/api/v1/categories");
+        }
+
+        public async Task<ResultModel<CategoryModel>> CreateAsync(CreateOrUpdateCategoryModel newCategory)
+        {
+            //newCategory.Image = "https://placeimg.com/640/480/any";
+            var result = await _httpClient.PostAsJsonAsync($"{_httpClient.BaseAddress}",newCategory);
+            if(result.IsSuccessStatusCode)
+            {
+                return new ResultModel<CategoryModel>
+                {
+                    Data = JsonSerializer.Deserialize<CategoryModel>(await result.Content.ReadAsStringAsync())
+                };
+            }
+            return new ResultModel<CategoryModel>
+            {
+                Errors = new List<string> { "Category not created!" }
+            };
         }
 
         public async Task<ResultModel<IEnumerable<CategoryModel>>> GetAllAsync()
         {
             var resultModel = new ResultModel<IEnumerable<CategoryModel>>();
-            var result = await _httpClient.GetAsync($"{_httpClient.BaseAddress}categories");
+            var result = await _httpClient.GetAsync($"{_httpClient.BaseAddress}");
             if(!result.IsSuccessStatusCode)
             {
                 resultModel.Errors = new List<string> { "Connection error!" };

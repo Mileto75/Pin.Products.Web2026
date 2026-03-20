@@ -10,5 +10,6 @@ namespace Pin.Products.Core.Services.Interfaces
     public interface ICategoryApiService
     {
         Task<ResultModel<IEnumerable<CategoryModel>>> GetAllAsync();
+        Task<ResultModel<CategoryModel>> CreateAsync(CreateOrUpdateCategoryModel newCategory);
     }
 }

@@ -2,6 +2,10 @@
 @inject ICategoryApiService CategoryApiService
 <h3>Categories</h3>
 @* show category list component *@
+@if(isError)
+{ 
+    <AlertComponent Style="danger" Message="@errorMessage"></AlertComponent>
+}
 @if(categoryModels is null)
 { 
     <LoadingComponent></LoadingComponent>
@@ -19,6 +23,8 @@ else
     }
 }
 @code {
+    private bool isError;
+    private string errorMessage;
     private CreateOrUpdateCategoryModel newCategory;
     private IEnumerable<CategoryModel> categoryModels;
     protected override async Task OnInitializedAsync()
@@ -27,6 +33,8 @@ else
     }
     private async Task GetCategories()
     {
+        isError = false;
+        categoryModels = null;
         var result = await CategoryApiService.GetAllAsync();
         if(result.IsSuccess)
         {
@@ -35,20 +43,38 @@ else
         else
         {
             //display error
+            isError = true;
         }
     }
     //reacts/handles a click on the 'New' button
     //displays the form
     private void NewCategory()
     {
+        isError = false;
         newCategory = new();
     }
     //method to send a post request to create a new category
     private async Task CreateCategory(CreateOrUpdateCategoryModel createOrUpdateCategoryModel)
-    { 
-        
+    {
         //call service class to send post to api
+        var result = await CategoryApiService.CreateAsync(createOrUpdateCategoryModel);
         //show message
+        if(result.IsSuccess)
+        {
+            //show success message
+            //Add new category to list
+            //categoryModels = categoryModels.Append<CategoryModel>(result.Data);
+            //StateHasChanged();
+            //or call await GetCategories()
+            await GetCategories();
+        }
+        else
+        {
+            //show error message
+            isError = true;
+            errorMessage = string.Join("<br>", result.Errors);
+        }
         //hide form => newCategory = null
+        newCategory = null;
     }
 }
