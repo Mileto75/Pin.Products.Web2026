@@ -11,6 +11,7 @@ else
     @if(newCategory is not null)
     {
         //show the new category form
+        <CategoryFormComponent NewCategory="newCategory"></CategoryFormComponent>
     }
     else
     { 
@@ -18,7 +19,7 @@ else
     }
 }
 @code {
-    private CategoryModel newCategory;
+    private CreateOrUpdateCategoryModel newCategory;
     private IEnumerable<CategoryModel> categoryModels;
     protected override async Task OnInitializedAsync()
     {
