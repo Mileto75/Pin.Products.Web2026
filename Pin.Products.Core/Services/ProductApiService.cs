@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Pin.Products.Core.Services
 {
-    public class ProductService : IProductService
+    public class ProductApiService : IProductApiService
     {
         private readonly HttpClient _httpClient;
 
-        public ProductService(HttpClient httpClient)
+        public ProductApiService(HttpClient httpClient)
         {
             _httpClient = httpClient;
             _httpClient.BaseAddress = new Uri("https://api.escuelajs.co/api/v1/products");

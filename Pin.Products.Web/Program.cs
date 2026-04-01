@@ -14,6 +14,7 @@ namespace Pin.Products.Web
             builder.Services.AddHttpClient();
             //register service classes
             builder.Services.AddScoped<ICategoryApiService, CategoryApiService>();
+            builder.Services.AddScoped<IProductApiService, ProductApiService>();
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 

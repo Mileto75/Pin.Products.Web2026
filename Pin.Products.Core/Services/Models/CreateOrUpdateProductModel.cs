@@ -25,6 +25,5 @@ namespace Pin.Products.Core.Services.Models
 
         [JsonPropertyName("images")]
         public List<string> Images { get; set; }
-
     }
 }

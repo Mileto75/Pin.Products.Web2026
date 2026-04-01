@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pin.Products.Core.Services.Interfaces
 {
-    public interface IProductService
+    public interface IProductApiService
     {
         Task<ResultModel<IEnumerable<ProductModel>>> GetAllAsync();
         Task<ResultModel<ProductModel>> CreateAsync(CreateOrUpdateProductModel newProduct);
