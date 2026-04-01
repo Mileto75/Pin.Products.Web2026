@@ -7,7 +7,7 @@
 <div class="row">
     @foreach (var category in Categories)
     {
-        <CategoryComponent Category="category" OnDelete="OnDelete"></CategoryComponent>
+        <CategoryComponent Category="category" OnDelete="OnDelete" OnEdit="OnEdit"></CategoryComponent>
     }
 </div>
 @code {
@@ -17,4 +17,6 @@
     public EventCallback OnAdd { get; set; }
     [Parameter]
     public EventCallback<int> OnDelete { get; set; }
+    [Parameter]
+    public EventCallback<CategoryModel> OnEdit { get; set; }
 }

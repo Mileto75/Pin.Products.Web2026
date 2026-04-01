@@ -75,5 +75,31 @@ namespace Pin.Products.Core.Services
                 return false;
             }
         }
+
+        public async Task<ResultModel<CategoryModel>> UpdateAsync(CreateOrUpdateCategoryModel newCategory)
+        {
+            try
+            {
+                var result = await _httpClient.PutAsJsonAsync($"{_httpClient}/{newCategory.Id}",newCategory);
+                if (result.IsSuccessStatusCode)
+                {
+                    return new ResultModel<CategoryModel>
+                    {
+                        Data = JsonSerializer.Deserialize<CategoryModel>(await result.Content.ReadAsStringAsync())
+                    };
+                }
+                return new ResultModel<CategoryModel>
+                {
+                    Errors = new List<string> { "Category not updated!" }
+                };
+            }catch(HttpRequestException httpRequestException)
+            {
+                Console.WriteLine(httpRequestException.Message);
+                return new ResultModel<CategoryModel>
+                {
+                    Errors = new List<string> { "Connection error!" }
+                };
+            }
+        }
     }
 }

@@ -25,7 +25,7 @@ else
     else
     {
         @* show category list component *@
-        <CategoryListComponent Categories="categoryModels" OnAdd="NewCategory" OnDelete="Delete"></CategoryListComponent>
+        <CategoryListComponent Categories="categoryModels" OnAdd="NewCategory" OnDelete="Delete" OnEdit="Edit"></CategoryListComponent>
     }
 }
 @code {
@@ -85,8 +85,8 @@ else
             }
         }
         else
-        { 
-            //update
+        {
+            //update the category
         }
 
         //hide form => newCategory = null
@@ -114,9 +114,12 @@ else
         //reload the categories
         await GetCategories();
     }
-    private void Update(CreateOrUpdateCategoryModel createOrUpdateCategoryModel)
+    private void Edit(CategoryModel categoryModel)
     {
-        //set newCategory to update
-        newCategory = createOrUpdateCategoryModel;
+        //transform/project to newCategory to update
+        newCategory = new();
+        newCategory.Id = categoryModel.Id;
+        newCategory.Name = categoryModel.Name;
+        newCategory.Image = categoryModel.Image;
     }
 }
