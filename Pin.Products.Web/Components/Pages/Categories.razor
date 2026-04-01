@@ -20,7 +20,7 @@ else
     @if (newCategory is not null)
     {
         //show the new category form
-        <CategoryFormComponent NewCategory="newCategory" OnSave="CreateCategory" OnCancel="Cancel"></CategoryFormComponent>
+        <CategoryFormComponent NewCategory="newCategory" OnSave="Save" OnCancel="Cancel"></CategoryFormComponent>
     }
     else
     {
@@ -60,7 +60,7 @@ else
         newCategory = new();
     }
     //method to send a post request to create a new category
-    private async Task CreateCategory(CreateOrUpdateCategoryModel createOrUpdateCategoryModel)
+    private async Task Save(CreateOrUpdateCategoryModel createOrUpdateCategoryModel)
     {
         //check if id == 0 => new category else update category
         //call service class to send post to api
