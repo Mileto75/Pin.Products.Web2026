@@ -10,6 +10,8 @@ namespace Pin.Products.Core.Services.Models
 {
     public class CreateOrUpdateCategoryModel
     {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
         [JsonPropertyName("name")]
         [Required(ErrorMessage = "Please provide a Name!")]
         public string Name { get; set; }

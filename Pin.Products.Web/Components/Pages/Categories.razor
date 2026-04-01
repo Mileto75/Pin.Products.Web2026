@@ -1,30 +1,36 @@
 ﻿@page "/categories"
 @inject ICategoryApiService CategoryApiService
 <h3>Categories</h3>
-@* show category list component *@
-@if(isError)
-{ 
+@* show error messages *@
+@if (errorMessage is not null)
+{
     <AlertComponent Style="danger" Message="@errorMessage"></AlertComponent>
 }
-@if(categoryModels is null)
+@* show user messages *@
+@if(message is not null)
 { 
+    <AlertComponent Style="info" Message="@message"></AlertComponent>
+}
+@if (categoryModels is null)
+{
     <LoadingComponent></LoadingComponent>
 }
 else
-{ 
-    @if(newCategory is not null)
+{
+    @if (newCategory is not null)
     {
         //show the new category form
         <CategoryFormComponent NewCategory="newCategory" OnSave="CreateCategory" OnCancel="Cancel"></CategoryFormComponent>
     }
     else
-    { 
+    {
+        @* show category list component *@
         <CategoryListComponent Categories="categoryModels" OnAdd="NewCategory" OnDelete="Delete"></CategoryListComponent>
     }
 }
 @code {
-    private bool isError;
     private string errorMessage;
+    private string message;
     private CreateOrUpdateCategoryModel newCategory;
     private IEnumerable<CategoryModel> categoryModels;
     protected override async Task OnInitializedAsync()
@@ -33,47 +39,56 @@ else
     }
     private async Task GetCategories()
     {
-        isError = false;
+        errorMessage = null;
         categoryModels = null;
         var result = await CategoryApiService.GetAllAsync();
-        if(result.IsSuccess)
+        if (result.IsSuccess)
         {
             categoryModels = result.Data;
         }
         else
         {
             //display error
-            isError = true;
+            errorMessage = string.Join(' ', result.Errors);
         }
     }
     //reacts/handles a click on the 'New' button
     //displays the form
     private void NewCategory()
     {
-        isError = false;
+        errorMessage = null;
         newCategory = new();
     }
     //method to send a post request to create a new category
     private async Task CreateCategory(CreateOrUpdateCategoryModel createOrUpdateCategoryModel)
     {
+        //check if id == 0 => new category else update category
         //call service class to send post to api
-        var result = await CategoryApiService.CreateAsync(createOrUpdateCategoryModel);
-        //show message
-        if(result.IsSuccess)
+        if(createOrUpdateCategoryModel.Id.Equals(0))
         {
-            //show success message
-            //Add new category to list
-            //categoryModels = categoryModels.Append<CategoryModel>(result.Data);
-            //StateHasChanged();
-            //or call await GetCategories()
-            await GetCategories();
+            var result = await CategoryApiService.CreateAsync(createOrUpdateCategoryModel);
+            //show message
+            if (result.IsSuccess)
+            {
+                //show success message
+                message = "Category created";
+                //Add new category to list
+                //categoryModels = categoryModels.Append<CategoryModel>(result.Data);
+                //StateHasChanged();
+                //or call await GetCategories()
+                await GetCategories();
+            }
+            else
+            {
+                //show error message
+                errorMessage = string.Join("<br>", result.Errors);
+            }
         }
         else
-        {
-            //show error message
-            isError = true;
-            errorMessage = string.Join("<br>", result.Errors);
+        { 
+            //update
         }
+
         //hide form => newCategory = null
         newCategory = null;
     }
@@ -84,19 +99,24 @@ else
     }
     private async Task Delete(int id)
     {
-        isError = false;
+        errorMessage = null;
         //call the service method
-        if(await CategoryApiService.DeleteAsync(id))
+        if (await CategoryApiService.DeleteAsync(id))
         {
             //show success message
+            message = "Category deleted";
         }
         else
         {
             //show errorMessage
-            isError = true;
             errorMessage = "Category not deleted!";
         }
         //reload the categories
         await GetCategories();
+    }
+    private void Update(CreateOrUpdateCategoryModel createOrUpdateCategoryModel)
+    {
+        //set newCategory to update
+        newCategory = createOrUpdateCategoryModel;
     }
 }
