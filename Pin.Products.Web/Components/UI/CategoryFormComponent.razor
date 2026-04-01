@@ -9,11 +9,14 @@
             <ValidationMessage For="@(()=> NewCategory.Name)"/>
         </div>
         <button type="submit" class="btn btn-outline-info">Save</button>
-    </EditForm>
+        <button type="button" class="btn btn-outline-warning" @onclick="@(() => OnCancel.InvokeAsync())">Cancel</button>
+    </EditForm> 
 </div>
 @code {
     [Parameter]
     public CreateOrUpdateCategoryModel NewCategory { get; set; }
     [Parameter]
     public EventCallback<CreateOrUpdateCategoryModel> OnSave { get; set; }
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
 }

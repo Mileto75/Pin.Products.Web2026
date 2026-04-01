@@ -15,11 +15,11 @@ else
     @if(newCategory is not null)
     {
         //show the new category form
-        <CategoryFormComponent NewCategory="newCategory" OnSave="CreateCategory"></CategoryFormComponent>
+        <CategoryFormComponent NewCategory="newCategory" OnSave="CreateCategory" OnCancel="Cancel"></CategoryFormComponent>
     }
     else
     { 
-        <CategoryListComponent Categories="categoryModels" OnAdd="NewCategory"></CategoryListComponent>
+        <CategoryListComponent Categories="categoryModels" OnAdd="NewCategory" OnDelete="Delete"></CategoryListComponent>
     }
 }
 @code {
@@ -76,5 +76,27 @@ else
         }
         //hide form => newCategory = null
         newCategory = null;
+    }
+    private void Cancel()
+    {
+        //reset the newCategory to display the list
+        newCategory = null;
+    }
+    private async Task Delete(int id)
+    {
+        isError = false;
+        //call the service method
+        if(await CategoryApiService.DeleteAsync(id))
+        {
+            //show success message
+        }
+        else
+        {
+            //show errorMessage
+            isError = true;
+            errorMessage = "Category not deleted!";
+        }
+        //reload the categories
+        await GetCategories();
     }
 }

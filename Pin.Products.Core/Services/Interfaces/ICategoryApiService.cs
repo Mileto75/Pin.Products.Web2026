@@ -11,5 +11,6 @@ namespace Pin.Products.Core.Services.Interfaces
     {
         Task<ResultModel<IEnumerable<CategoryModel>>> GetAllAsync();
         Task<ResultModel<CategoryModel>> CreateAsync(CreateOrUpdateCategoryModel newCategory);
+        Task<bool> DeleteAsync(int id);
     }
 }
