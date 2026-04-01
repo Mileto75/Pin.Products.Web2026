@@ -50,5 +50,8 @@ namespace Pin.Products.Core.Services
             resultModel.Data = JsonSerializer.Deserialize<IEnumerable<CategoryModel>>(content);
             return resultModel;
         }
+        //write a delete method in the CategoryApiService
+        //call the https://api.escuelajs.co/api/v1/categories/{id} endpoint
+
     }
 }

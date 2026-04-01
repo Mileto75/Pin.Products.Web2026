@@ -1,9 +1,12 @@
 ﻿
 <div class="col col-lg-4 mx-auto">
     <EditForm Model="NewCategory" OnValidSubmit="@(()=> OnSave.InvokeAsync(NewCategory))">
+        @* activate data validation *@
+        <DataAnnotationsValidator/>
         <div class="form-group">
             <label>Name:</label>
             <InputText @bind-Value="NewCategory.Name" class="form-control" />
+            <ValidationMessage For="@(()=> NewCategory.Name)"/>
         </div>
         <button type="submit" class="btn btn-outline-info">Save</button>
     </EditForm>
