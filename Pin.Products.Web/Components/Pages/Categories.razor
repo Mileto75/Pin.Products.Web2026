@@ -64,32 +64,35 @@ else
     {
         //check if id == 0 => new category else update category
         //call service class to send post to api
+        var result = new ResultModel<CategoryModel>();
         if(createOrUpdateCategoryModel.Id.Equals(0))
         {
-            var result = await CategoryApiService.CreateAsync(createOrUpdateCategoryModel);
-            //show message
-            if (result.IsSuccess)
-            {
-                //show success message
-                message = "Category created";
-                //Add new category to list
-                //categoryModels = categoryModels.Append<CategoryModel>(result.Data);
-                //StateHasChanged();
-                //or call await GetCategories()
-                await GetCategories();
-            }
-            else
-            {
-                //show error message
-                errorMessage = string.Join("<br>", result.Errors);
-            }
+            result = await CategoryApiService.CreateAsync(createOrUpdateCategoryModel);
         }
         else
         {
             //update the category
+            result = await CategoryApiService.UpdateAsync(createOrUpdateCategoryModel);
+
+        }
+        //check if success
+        if (result.IsSuccess)
+        {
+            //show success message
+            if (newCategory.Id.Equals(0))
+                message = "Category created";
+            else
+                message = "Category updated";
+        }
+        else
+        {
+            //show error message
+            errorMessage = string.Join("<br>", result.Errors);
         }
 
         //hide form => newCategory = null
+        //reload categories
+        await GetCategories();
         newCategory = null;
     }
     private void Cancel()

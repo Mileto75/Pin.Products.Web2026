@@ -80,7 +80,7 @@ namespace Pin.Products.Core.Services
         {
             try
             {
-                var result = await _httpClient.PutAsJsonAsync($"{_httpClient}/{newCategory.Id}",newCategory);
+                var result = await _httpClient.PutAsJsonAsync($"{_httpClient.BaseAddress}/{newCategory.Id}",newCategory);
                 if (result.IsSuccessStatusCode)
                 {
                     return new ResultModel<CategoryModel>
